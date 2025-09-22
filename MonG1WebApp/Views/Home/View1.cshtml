@@ -1,0 +1,40 @@
+﻿<h1>Welcome FRom My First View :)</h1>
+
+<style>
+    h1{
+        background-color:yellow;
+        color:red;
+    }
+</style>
+<script>
+    console.log("hiiiiiiiiiiiiii");
+</script>
+<!--Razor Sytax (razor Engin)-->
+<!--Blocking statments-->
+@{
+    int x=10;
+    int y = x + 10;
+    <h1>Heelooo</h1>
+}
+<!--Inline Statment (Display C# Varaible value)-->
+@(x+y)
+<h2>@x</h2>
+
+<!--If Condition-->
+@if (x > y)
+{
+    <h2> X Greater Than Y</h2>
+}
+else
+{
+    <h2> X = @x Less Than Y = @y</h2>
+}
+
+<!--Iteration (for  -While -do while -foreach-->
+
+<ul>
+    @for(int i = 0; i < 10; i++)
+    {
+        <li>@i</li>
+    }
+</ul>
