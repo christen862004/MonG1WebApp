@@ -1,0 +1,56 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";//Who ???
+}
+
+<h1>Details</h1>
+<h2 style="color:@ViewData["Clr"]"> Welcome  @Model.Name</h2>
+<h2 style="color:@ViewBag.Clr"> Welcome  @Model.Name</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr />
+<h3>@ViewBag.xyz</h3>
+<h3>@ViewData["xyz"]</h3>
+
+<hr />
+<h3>@(int.Parse(ViewData["Temp"].ToString())-10)</h3>
+<h3>@(ViewBag.Temp-10)</h3>
+
+
+<hr />
+
+<h3>@ViewData["Msg"]</h3>
+<h3>@ViewBag.Msg</h3>
+<hr />
+<select class="form form-control">
+    @foreach (var item in (List<string>)ViewData["Brch"])
+    {
+        <option>@item</option>
+    }
+</select>
+<select class="form form-control">
+    @foreach (var item in ViewBag.Brch)
+    {
+        <option>@item</option>
+    }
+</select>
+
+
+<!--ViewData Problems
+    1) Magic String(Key)
+    2) Type Casting (unboxing)
+-->
