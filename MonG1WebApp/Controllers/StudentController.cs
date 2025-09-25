@@ -9,6 +9,7 @@ namespace MonG1WebApp.Controllers
         //Student/All
         public IActionResult All()
         {
+            
             List<Student> stdListModel = 
                 studentBL.GetAll();
             //send View
