@@ -4,6 +4,21 @@ namespace MonG1WebApp.Controllers
 {
     public class StateController : Controller
     {
+        // public - non ststiac  -no overload only in one case
+
+        [HttpGet]//State/MEhod1 (get)
+        public IActionResult Method1()
+        {
+            return Content("Method1 Overload 1");
+        }
+        [HttpPost]
+        public IActionResult Method1(int id)
+        {
+            return Content("Method1 Overload 2");
+        }
+
+
+
         public IActionResult SetSession(string name)
         {
             //logic
