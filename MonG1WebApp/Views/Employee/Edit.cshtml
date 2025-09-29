@@ -5,12 +5,27 @@
 
 <h1>Edit</h1>
 <form method="post" action="/Employee/SaveEdit/@Model.Id">
+
+    
+    <!--Pure HTML
+    <label>Email</label>
+    <input type="text" class="form form-control" id="Email" name="Email" value="@Model.Email" />-->
+    <!--Pure C# using HTML Helper (core | non Core)-->
+    @* @Html.TextBox("Email") *@
+    
+    @* @Html.LabelFor(e=>e.Email)<!--User Email--> *@
+    @* @Html.TextBoxFor(e => e.Email, new { style = "color:red",@class="form form-control"}) *@
+    @* @Html.EditorFor(e=>e.Email) *@
+    
+    <label asp-for="Email"></label>
+    <input class="form form-control" asp-for="Email"/>
+
+
+
      @* <input type="hidden" name="Id" value="@Model.Id" />  *@
     <label>Name</label>
     <input type="text" class="form form-control" id="Name" name="Name" value="@Model.Name" />
 
-    <label>Email</label>
-    <input type="text" class="form form-control" id="Email" name="Email" value="@Model.Email" />
 
     <label>ImageURL</label>
     <input type="text" class="form form-control" id="ImageURL" name="ImageURL" value="@Model.ImageURL" />
@@ -41,4 +56,17 @@
 
     <input type="submit" value="Save" class="btn btn-success" />
 </form>
+
+
 <a href="/Employee/Index">Back To List</a>
+ - 
+@Html.ActionLink("- Back To List -","Index","Employee",null,new{@class="btn btn-success"})
+ - 
+<a asp-action="Index" asp-controller="Employee">-- Back to List --</a>
+<hr />
+<a href="/Employee/Details/1?name=ahemd">Details</a>
+-
+@Html.ActionLink("- Details -", "Details","Employee",new{id=Model.Id,name=Model.Name})
+-
+<a asp-action="Details" asp-controller="Employee" asp-route-id="@Model.Id"  asp-route-name="@Model.Name" >--details--</a>
+

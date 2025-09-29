@@ -1,6 +1,7 @@
 ﻿
 
 using MonG1WebApp.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MonG1WebApp.ViewModels
 {
@@ -10,6 +11,9 @@ namespace MonG1WebApp.ViewModels
         public string Name { get; set; }
         public int Salary { get; set; }
         public string? ImageURL { get; set; }
+
+        [Display(Name="Email Address")]
+        [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
         public int DepartmentID { get; set; }

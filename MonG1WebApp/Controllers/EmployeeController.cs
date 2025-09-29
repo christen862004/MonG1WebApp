@@ -19,6 +19,29 @@ namespace MonG1WebApp.Controllers
             return View("Index",context.Employees.ToList());
         }
 
+        #region AddNEw Employee
+       
+        public IActionResult New()
+        {
+            ViewData["DeptList"] = context.Departments.ToList();
+            return View("New");
+        }
+        
+        [HttpPost]//limit this endpoint handel only internet req
+        [ValidateAntiForgeryToken]//handel internal req only
+        public IActionResult SaveNew(Employee empFromRequest)
+        {
+            if(empFromRequest.Name!=null && empFromRequest.Salary > 7000)// && empFromRequest.DepartmentID!=0)
+            {
+                context.Employees.Add(empFromRequest);
+                context.SaveChanges();//fk (0) ==> pk(1)
+                return RedirectToAction("Index", "Employee");
+            }
+            ViewData["DeptList"] = context.Departments.ToList();
+            return View("New", empFromRequest);
+        }
+        #endregion
+
         #region Edit
         public IActionResult Edit(int id) {
             //collecte
@@ -66,7 +89,8 @@ namespace MonG1WebApp.Controllers
 
 
         #region     DEtails
-        public IActionResult Details(int id)
+        //Employee/Details/1?name=ahemd
+        public IActionResult Details(int id,string name)
         {
             //send to view Extar info
             string msg = "Hello FRom Back";

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonG1WebApp.Models
 {
@@ -11,6 +12,7 @@ namespace MonG1WebApp.Models
         public string? Email { get; set; }
 
         [ForeignKey("Department")]
+        [Display(Name="Department")]
         public int DepartmentID { get; set; }
 
         public Department Department { get; set; }
