@@ -18,6 +18,6 @@ namespace MonG1WebApp.ViewModels
 
         public int DepartmentID { get; set; }
         //-------------------------------------------
-        public List<Department> DeptList { get; set; }
+        public List<Department>? DeptList { get; set; }
     }
 }

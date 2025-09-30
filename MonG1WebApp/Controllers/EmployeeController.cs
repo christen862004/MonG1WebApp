@@ -19,10 +19,25 @@ namespace MonG1WebApp.Controllers
             return View("Index",context.Employees.ToList());
         }
 
-        #region AddNEw Employee
-       
-        public IActionResult New()
+        #region Validation
+        //Employee/CheckSalary?Salary=1000&DepartmentID=1
+        public IActionResult CheckSalary(int Salary,int DepartmentID)
         {
+            if (Salary > 7000 && DepartmentID==1)
+            {
+                return Json(true);
+            }else if(Salary>10 && DepartmentID==2)
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
+        #endregion
+
+        #region AddNEw Employee
+
+        public IActionResult New()
+       {
             ViewData["DeptList"] = context.Departments.ToList();
             return View("New");
         }
@@ -31,11 +46,19 @@ namespace MonG1WebApp.Controllers
         [ValidateAntiForgeryToken]//handel internal req only
         public IActionResult SaveNew(Employee empFromRequest)
         {
-            if(empFromRequest.Name!=null && empFromRequest.Salary > 7000)// && empFromRequest.DepartmentID!=0)
+            if(ModelState.IsValid)
             {
-                context.Employees.Add(empFromRequest);
-                context.SaveChanges();//fk (0) ==> pk(1)
-                return RedirectToAction("Index", "Employee");
+                try
+                {
+                    context.Employees.Add(empFromRequest);
+                    context.SaveChanges();//fk (0) ==> pk(1)
+                    return RedirectToAction("Index", "Employee");
+                }catch(Exception ex)
+                {
+                    //send Exception view as modelstate error
+                    //ModelState.AddModelError("DepartmentID", "Please Select DEpartment");
+                    ModelState.AddModelError("Erro1", ex.InnerException.Message);
+                }
             }
             ViewData["DeptList"] = context.Departments.ToList();
             return View("New", empFromRequest);
