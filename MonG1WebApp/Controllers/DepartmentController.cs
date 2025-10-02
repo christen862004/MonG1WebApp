@@ -1,15 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MonG1WebApp.Models;
+using MonG1WebApp.Repository;
 
 namespace MonG1WebApp.Controllers
 {
     public class DepartmentController : Controller
     {
-        ITIContext context = new ITIContext();
-
+        // ITIContext context = new ITIContext();
+        IDepartmentRepository DeptRepo;
+        public DepartmentController(IDepartmentRepository deptrepo)
+        {
+            DeptRepo = deptrepo;// new DepartmentRepository();
+        }
         public IActionResult Index()
         {
-            List<Department> departmentList = context.Departments.ToList();
+            
+            List<Department> departmentList = DeptRepo.GetAll();
             return View("Index",departmentList);
             //view Index ,Model Lsit<department>
         }
@@ -30,8 +36,8 @@ namespace MonG1WebApp.Controllers
             //logic 
             if (deptFromReq.Name != null) {
 
-                context.Departments.Add(deptFromReq);
-                context.SaveChanges();
+                DeptRepo.Add(deptFromReq);
+                DeptRepo.Save();
                 //go to another Action "Request"
                 return RedirectToAction("Index","Department");//searcj indein current controller
             }

@@ -6,15 +6,20 @@ namespace MonG1WebApp.Models
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public ITIContext():base()
-        {}
+        //public ITIContext() : base()
+        //{ }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ITIContext(DbContextOptions<ITIContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=MonR1_25;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+
         }
 
-        //DBMS (SQl Server) -  server name - login - data name ..... (DbContext Option)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=MonR1_25;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        //}
+
+        //DBMS (SQl Server) -  server name - login - database name ..... (DbContext Option)
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

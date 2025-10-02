@@ -1,22 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MonG1WebApp.Models;
+using MonG1WebApp.Repository;
 using MonG1WebApp.ViewModels;
 
 namespace MonG1WebApp.Controllers
 {
     public class EmployeeController : Controller
     {
-        ITIContext context = new ITIContext();
-        public EmployeeController()
+        //ITIContext context = new ITIContext();fully dependded
+        IEmployeeRepository empRepository;
+        IDepartmentRepository departmentRepository;
+        //Solid using DI
+        public EmployeeController(IEmployeeRepository empRepo, IDepartmentRepository deptRepo)
         {
             
+            empRepository =empRepo;// new EmployeeRepository();
+            departmentRepository =deptRepo;// new DepartmentRepository();
         }
 
 
         public IActionResult Index()
         {
-            return View("Index",context.Employees.ToList());
+            return View("Index",empRepository.GetAll());
         }
 
         #region Validation
@@ -38,7 +44,7 @@ namespace MonG1WebApp.Controllers
 
         public IActionResult New()
        {
-            ViewData["DeptList"] = context.Departments.ToList();
+            ViewData["DeptList"] =departmentRepository.GetAll();
             return View("New");
         }
         
@@ -50,8 +56,8 @@ namespace MonG1WebApp.Controllers
             {
                 try
                 {
-                    context.Employees.Add(empFromRequest);
-                    context.SaveChanges();//fk (0) ==> pk(1)
+                    empRepository.Add(empFromRequest);
+                    empRepository.Save();//fk (0) ==> pk(1)
                     return RedirectToAction("Index", "Employee");
                 }catch(Exception ex)
                 {
@@ -60,7 +66,7 @@ namespace MonG1WebApp.Controllers
                     ModelState.AddModelError("Erro1", ex.InnerException.Message);
                 }
             }
-            ViewData["DeptList"] = context.Departments.ToList();
+            ViewData["DeptList"] = departmentRepository.GetAll();
             return View("New", empFromRequest);
         }
         #endregion
@@ -68,8 +74,8 @@ namespace MonG1WebApp.Controllers
         #region Edit
         public IActionResult Edit(int id) {
             //collecte
-            Employee empFromDB = context.Employees.FirstOrDefault(e=>e.Id==id);
-            List<Department> deptList = context.Departments.ToList();
+            Employee empFromDB = empRepository.GetByID(id);
+            List<Department> deptList = departmentRepository.GetAll();
             //ddeclare viewMoedl
             EmployeeWithDeptListViewModel EmpViewModel = new();
             //mapping
@@ -91,21 +97,23 @@ namespace MonG1WebApp.Controllers
             if(empFromReq.Name != null)
             {
                 //get oldd ref
-                Employee EmpFromDb= context.Employees.FirstOrDefault(e => e.Id == empFromReq.Id);
+                Employee EmpFromDb= new Employee();
                 //map
+                EmpFromDb.Id= empFromReq.Id;
                 EmpFromDb.Salary= empFromReq.Salary;
                 EmpFromDb.Name= empFromReq.Name;
                 EmpFromDb.ImageURL=empFromReq.ImageURL;
                 EmpFromDb.Email=empFromReq.Email;
                 EmpFromDb.DepartmentID=empFromReq.DepartmentID;
+                empRepository.Update(EmpFromDb);
                 //save
-                context.SaveChanges();
+                empRepository.Save();
                 return RedirectToAction("Index");
 
             }
             
             //refill local lists
-            empFromReq.DeptList = context.Departments.ToList();
+            empFromReq.DeptList = departmentRepository.GetAll();
             return View("Edit", empFromReq);
         }
         #endregion
@@ -131,9 +139,9 @@ namespace MonG1WebApp.Controllers
 
 
             ViewBag.xyz = "Hello";//set ugin viewbag ViewData["xyz"]="Hello
-            
+
             //Send Employee in Model
-            Employee empModel = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee empModel = empRepository.GetByID(id);//context.Employees.FirstOrDefault(e => e.Id == id);
             return View("Details",empModel); //Model =Employee
         }
 
@@ -144,7 +152,7 @@ namespace MonG1WebApp.Controllers
             int Temp = 30;
             List<string> branches =
                 new List<string>() { "Alex", "Smart", "New Capital", "Monofia" };
-            Employee empModel = context.Employees.Include(e=>e.Department).FirstOrDefault(e => e.Id == id);
+            Employee empModel = empRepository.GetByID(id);// context.Employees.Include(e=>e.Department).FirstOrDefault(e => e.Id == id);
 
             //Declare VM Object
             EmpNameWithMSgClrTempBrachListViewModel EmpVM = new();
@@ -152,7 +160,7 @@ namespace MonG1WebApp.Controllers
             //Map Get Data From Sourec set In VM 
             EmpVM.EmpId = empModel.Id;
             EmpVM.EmpName = empModel.Name;
-            EmpVM.DeptName = empModel.Department.Name;
+            EmpVM.DeptName = empModel.Department?.Name;
             EmpVM.Message = msg;
             EmpVM.Temp = Temp;
             EmpVM.Branches = branches;

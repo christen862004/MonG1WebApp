@@ -20,7 +20,8 @@ namespace MonG1WebApp.Models
 
             Employee empFromRe = validationContext.ObjectInstance as Employee;
             
-            ITIContext context = new ITIContext();
+            ITIContext context =(ITIContext) validationContext.GetRequiredService(typeof(ITIContext));
+
             Employee empFromDb=context.Employees
                 .FirstOrDefault(e => e.Email == email && e.DepartmentID==empFromRe.DepartmentID);
             

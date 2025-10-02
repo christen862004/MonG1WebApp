@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using MonG1WebApp.Models;
+using MonG1WebApp.Repository;
+
 namespace MonG1WebApp
 {
     public class Program
@@ -7,14 +11,28 @@ namespace MonG1WebApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container. //service
+            //1) Built in service and alread register Containe
+            //2) Built in Service but need to register
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(45);
             });
+            //register ITIContext, options 
+            builder.Services.AddDbContext<ITIContext>(optionsBuilder => { 
+                optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("cs"));            
+            });
+
+            //3) Custom srevice need to register
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IService, Service>();
+
+
 
             var app = builder.Build();//
+
 
             // Configure the HTTP request pipeline. (middleware)
             #region Custom Middleware : inline Middelware
