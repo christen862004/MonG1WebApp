@@ -6,9 +6,7 @@ namespace MonG1WebApp.Controllers
 {
     //any class can be controller can handel request
     // 1 ) class Name End with (suffix) Controller KeyWord
-    // 2 ) class inherit from Controller
-
-    
+    // 2 ) class inherit from Controller    
     public class HomeController : Controller
     {
         /*

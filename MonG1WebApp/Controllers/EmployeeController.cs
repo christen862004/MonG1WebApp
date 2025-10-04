@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MonG1WebApp.Models;
 using MonG1WebApp.Repository;
@@ -14,12 +15,10 @@ namespace MonG1WebApp.Controllers
         //Solid using DI
         public EmployeeController(IEmployeeRepository empRepo, IDepartmentRepository deptRepo)
         {
-            
             empRepository =empRepo;// new EmployeeRepository();
             departmentRepository =deptRepo;// new DepartmentRepository();
         }
-
-
+        
         public IActionResult Index()
         {
             return View("Index",empRepository.GetAll());
