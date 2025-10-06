@@ -1,9 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MonG1WebApp.Controllers
 {
     public class StateController : Controller
     {
+
+        //State/TestData
+        public IActionResult TestData()
+        {
+            if (User.Identity.IsAuthenticated == true)
+            {
+
+                //bool admin= User.IsInRole("Admin");//Claim
+                string name = User.Identity.Name;//get username loged user
+                Claim idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                string id = idClaim.Value;
+
+                // Claim addClaim = User.Claims.FirstOrDefault(c => c.Type == "Address");
+
+                //User Weleomce NAme
+                return Content($"Welcoem {name} \nId: {id}");//\nAddress:{addClaim.Value}");
+            }
+            else
+            {
+                //Gust wElcome Gust
+                return Content("Welcome Gust");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
         // public - non ststiac  -no overload only in one case
 
         [HttpGet]//State/MEhod1 (get)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MonG1WebApp.Models;
 using MonG1WebApp.Repository;
 
@@ -12,6 +13,7 @@ namespace MonG1WebApp.Controllers
         {
             DeptRepo = deptrepo;// new DepartmentRepository();
         }
+        [Authorize]//cookie iddenitty
         public IActionResult Index()
         {
             

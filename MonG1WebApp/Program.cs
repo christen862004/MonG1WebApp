@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MonG1WebApp.Filters;
 using MonG1WebApp.Models;
@@ -27,6 +28,13 @@ namespace MonG1WebApp
             builder.Services.AddDbContext<ITIContext>(optionsBuilder => { 
                 optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("cs"));            
             });
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(optios =>
+            {
+                optios.Password.RequiredLength = 4;
+                optios.Password.RequireNonAlphanumeric = false;
+                optios.Password.RequireDigit = false;
+            }).AddEntityFrameworkStores<ITIContext>();
 
             //3) Custom srevice need to register
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register
